@@ -1,6 +1,6 @@
 # boot-docker-support-sample
 
-A sample spring-boot app that demonstrates newly added [docker-compose support](https://docs.spring.io/spring-boot/reference/features/dev-services.html#features.dev-services.docker-compose) to create and configure service containers for local testing. It also shows usage of [test-containers](https://java.testcontainers.org/) for automated testing.
+A sample spring-boot app that demonstrates newly added [docker-compose support](https://docs.spring.io/spring-boot/reference/features/dev-services.html#features.dev-services.docker-compose) to create and configure service containers for local development. It also shows usage of [test-containers](https://java.testcontainers.org/) for automated testing.
 
 ## Pre-requisites
 
