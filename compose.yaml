@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:8'
+    environment:
+      - 'MYSQL_DATABASE=testdb'
+      - 'MYSQL_PASSWORD=cantguessthis'
+      - 'MYSQL_ROOT_PASSWORD=veryverysecret'
+      - 'MYSQL_USER=whoami'
+    ports:
+      - '3306'
