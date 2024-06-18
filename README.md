@@ -69,9 +69,16 @@ The next improvement we can make is to create a CDS snapshot and use it to speed
 
 Then run the application using the CDS snapshot by invoking [`bin/run-cds-jar.sh`](bin/run-cds-jar.sh) and notice the startup time. There might be upto 50% improvement compared to our base measurements.
 
+### Native compile
 
+The final improvement we can make is to compile our application as a native binary using GraalVM. First switch to a GraalVM installation and make sure that `java -version` shows that it is so. For example, the output from that command might be:
 
+```
+openjdk version "21.0.2" 2024-01-16
+OpenJDK Runtime Environment GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30)
+OpenJDK 64-Bit Server VM GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30, mixed mode, sharing)
+```
 
+Then compile the application by running [`bin/make-native-binary.sh`](bin/make-native-binary.sh). This might take a minute or two. Way more than when we just compiled it before using `./mvnw clean package`. This is one of the downsides of compiling to native image. But there are benefits. First, notice the `target/dockerdemo` binary. This single binary is all that is needed to run your application on this and any other machine as long as it shares the same architecture and OS. The destination machine doesn't need any JRE/JDK installed. 
 
-
-
+Let's start the native binary by invoking [`bin/run-native-binary.sh`](bin/run-native-binary.sh) and notice the startup time. On MacOS, there is a security related popup that wants your permission to run this new binary (it's a new binary that got created from the previous step and the OS is just making sure you know what you are doing). Notice the fast startup times. Usually, this can be an improvement between 10x to 20x.  
