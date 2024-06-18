@@ -30,3 +30,48 @@ This will run the tests and will start/stop a *MySQL* container populated with t
 ## Runtime (outside of DEV lifecycle)
 
 After the application is bundled as a self-executing JAR, the `compose.yaml` file is no longer acted upon because the docker-compose capability is only supposed to aid during development. If the application needs to connect to a database in a non-local environment, we can rely on the normal spring properties mechanism to supply DB connection information.
+
+## Improving Startup Times
+
+Throughout all of these steps, we will simulate running in a non-dev environment by running a *MySQL* instance - since the automatic *docker-compose* support is not involved here. Start that external *MySQL* manually by running:
+
+```
+docker compose -f externaldb.yaml up -d
+```
+
+Also, compile a self-executing JAR so we can use it in subsequent steps
+
+```
+./mvnw clean package
+```
+
+Notice how long it took to compile/package our application. Majority of the time is spent in running our unit tests.
+
+### Taking base measurements
+
+We start the application by running [`bin/run-jar.sh`](bin/run-jar.sh). Notice the startup time. If the tail end of log output was the following:
+
+```
+2024-06-18T17:02:28.767-04:00  INFO 4577 --- [dockerdemo] [           main] com.example.dockerdemo.Application       : Started Application in 1.682 seconds (process running for 2.166)
+```
+
+... then we will consider `2.166` seconds as the startup time.
+
+### Extracted JAR
+
+The simplest improvement we can make is to reduce the JAR extraction time. If the application is bundled in an OCI image, it is recommended to bundle an extracted JAR, not a self-executing JAR. The jar can be extracted by running [`bin/extract-jar.sh`](bin/extract-jar.sh). Notice that a new `dockerdemo-1.0` directory got created, see its contents.
+
+Then run the application using the extracted JAR contents by invoking [`bin/run-extracted-jar.sh`](bin/run-extracted-jar.sh) and notice the startup time. This might be a very small improvement, around 10%.
+
+### CDS Snapshot
+
+The next improvement we can make is to create a CDS snapshot and use it to speed up class loading at starup. The CDS snapshot can be taken with [`bin/take-cds-snapshot.sh`](bin/take-cds-snapshot.sh). Notice that a new `application.jsa` file got created. This file contains the snapshot of all classes that need to be loaded on next startup.
+
+Then run the application using the CDS snapshot by invoking [`bin/run-cds-jar.sh`](bin/run-cds-jar.sh) and notice the startup time. There might be upto 50% improvement compared to our base measurements.
+
+
+
+
+
+
+
