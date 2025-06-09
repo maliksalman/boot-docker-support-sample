@@ -1,5 +1,6 @@
 #!/bin/bash
 
+docker compose -f externaldb.yaml up -d
 docker run --rm -it \
   -v ./config.properties:/config/config.properties \
   -e CONFIG_PATH=/config \
