@@ -35,3 +35,7 @@ build/
 ### CDS ###
 dockerdemo-1.0/
 application.jsa
+
+### misc ###
+talk.html
+hints/
